@@ -10,27 +10,27 @@ on:
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'twrp-11'
+        default: 'twrp-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/Galaxy-MT6768/android_device_samsung_a31nsxx'
+        default: 'https://github.com/peek-pop/Twrp_a'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'android-12'
+        default: 'android-12.1'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/samsung/a31'
+        default: 'device/samsung/a03s'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'a31'
+        default: 'a03s'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'twrp_a31'
+        default: 'twrp_a03s'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
         required: true
@@ -111,8 +111,8 @@ jobs:
         mkdir workspace
         cd workspace
         echo "::set-output name=pwd::$(pwd)"
-        git config --global user.name "Zillion"
-        git config --global user.email "zillion@example.com"
+        git config --global user.name "peek-pop"
+        git config --global user.email "topser50@gmail.com"
         repo init --depth=1 -u ${{ github.event.inputs.MANIFEST_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }}
       id: pwd
           
@@ -181,7 +181,7 @@ jobs:
         mkdir out/host
         mkdir out/host/linux-x86
         mkdir out/host/linux-x86/bin
-        wget -P out/host/linux-x86/bin https://raw.githubusercontent.com/Galaxy-MT6768/Galaxy_Recovery-Builder/main/files/bin/avbtool
+        wget -P out/host/linux-x86/bin https://raw.githubusercontent.com/peek-pop/Galaxy_Recovery-Builder/main/files/bin/avbtool
         chmod 777 out/host/linux-x86/bin/avbtool
         ls out/host/linux-x86/bin/avbtool
       working-directory: ${{ steps.pwd.outputs.pwd }}
@@ -195,7 +195,7 @@ jobs:
       
     - name: Check AVB info
       run: |
-        wget https://raw.githubusercontent.com/Galaxy-MT6768/Galaxy_Recovery-Builder/main/files/avbtool.py
+        wget https://raw.githubusercontent.com/peek-pop/Galaxy_Recovery-Builder/main/files/avbtool.py
         python3 avbtool.py info_image --image out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
         python3 avbtool.py info_image --image out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img > image_info
       working-directory: ${{ steps.pwd.outputs.pwd }}
