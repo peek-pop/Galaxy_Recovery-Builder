@@ -48,9 +48,9 @@ jobs:
         mkdir workspace
         cd workspace
         echo "::set-output name=pwd::$(pwd)"
-        git config --global user.name "Zillion"
-        git config --global user.email "zillion@example.com"
-        repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+        git config --global user.name "peek-pop"
+        git config --global user.email "topser50@gmail.com"
+        repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
       id: pwd
           
     - name: Repo Sync
@@ -66,10 +66,8 @@ jobs:
       
     - name: Clone device tree
       run: |
-        git clone https://github.com/Galaxy-MT6768/teamwin_device_samsung_a31 -b android-12 ./device/samsung/a31
-        git clone https://github.com/Galaxy-MT6768/teamwin_device_samsung_a41xx -b android-12 ./device/samsung/a41
-        chmod +x device/samsung/a31/mkbootimg
-        chmod +x device/samsung/a41/mkbootimg
+        git clone https://github.com/peek-pop/Twrp_a -b android-12.1 ./device/samsung/a03s
+        chmod +x device/samsung/a03s/mkbootimg
       working-directory: ${{ steps.pwd.outputs.pwd }}
       continue-on-error: true
 
@@ -85,7 +83,7 @@ jobs:
         mkdir out/host
         mkdir out/host/linux-x86
         mkdir out/host/linux-x86/bin
-        wget -P out/host/linux-x86/bin https://raw.githubusercontent.com/Galaxy-MT6768/Galaxy_Recovery-Builder/main/files/bin/avbtool
+        wget -P out/host/linux-x86/bin https://raw.githubusercontent.com/peek-pop/Galaxy_Recovery-Builder/main/files/bin/avbtool
         chmod 777 out/host/linux-x86/bin/avbtool
       working-directory: ${{ steps.pwd.outputs.pwd }}
       
@@ -93,10 +91,9 @@ jobs:
       run: |
         source build/envsetup.sh
         export ALLOW_MISSING_DEPENDENCIES=true
-        lunch twrp_a31-eng && make recoveryimage -j$(nproc --all)
-        lunch twrp_a41-eng && make recoveryimage -j$(nproc --all)
-        cp out/target/product/a31/recovery.tar out/target/product/a31/recovery_a31.tar
-        cp out/target/product/a41/recovery.tar out/target/product/a41/recovery_a41.tar
+        lunch twrp_a03s-eng && make recoveryimage -j$(nproc --all)
+        cp out/target/product/a03s/recovery.img out/target/product/a03s/recovery_a03s.img
+        cp out/target/product/a03s/recovery.tar out/target/product/a03s/recovery_a03s.tar
       working-directory: ${{ steps.pwd.outputs.pwd }}
       
     - name: Upload to Release
@@ -104,8 +101,8 @@ jobs:
       with:
         files: |
           workspace/image_info
-          workspace/out/target/product/a31/recovery_a31.tar
-          workspace/out/target/product/a41/recovery_a41.tar
+          workspace/out/target/product/a03s/recovery_a03s.img
+          workspace/out/target/product/a03s/recovery_a03s.tar
         name: a31_twrp-11
         tag_name: ${{ github.run_id }}
       env:
